@@ -8,6 +8,8 @@ export class Task {
     title!: string;
     @Column({default: false})
     isCompleted!: boolean;
+    @Column({default: 0})
+    listPosition!: number;
 
     @ManyToOne(()=>TaskList, (TaskList)=>TaskList.tasks,{ onDelete: "CASCADE"}) TaskList!: TaskList;
 

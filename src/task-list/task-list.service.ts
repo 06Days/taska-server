@@ -49,4 +49,8 @@ export class TaskListService {
       throw new NotFoundException(`Task list with ID ${id} not found`);
     }
   }
+  // async swapTasks(id: number, task1id: number, task2id: number): Promise<Task>{
+  //   const tempList = this.TaskListRepository.crea
+  //   this.taskRepository.getId(task1id)
+  // }
 }

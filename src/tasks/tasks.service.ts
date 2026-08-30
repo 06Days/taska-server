@@ -27,9 +27,39 @@ async remove(id: number): Promise<void> {
   }
 }
 
-  update(id: number, updateTaskDto: UpdateTaskDto) {
-    return `This action updates a #${id} task`;
+async toggle(id: number, listId: number): Promise<Task> {
+  const task = await this.taskRepository.findOne({where: {id}});
+  if(!task){
+    throw new NotFoundException(`Could not toggle task with ID ${id}`);
   }
+  task.isCompleted=!task.isCompleted;
+
+  return await this.taskRepository.save(task);
+
+}
+
+async update(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
+  const task = await this.taskRepository.findOne({ where: { id } });
+  if (!task) {
+    throw new NotFoundException(`Task with ID ${id} not found`);
+  }
+  this.taskRepository.merge(task, updateTaskDto);
+  return await this.taskRepository.save(task);
+}
+
+async swapTask(listId: number, task1id: number, task2id: number): Promise<void>{
+  const task1 = await this.taskRepository.findOne({where: {id: task1id, TaskList: {id: listId}}});
+  const task2 = await this.taskRepository.findOne({where: {id: task2id, TaskList: {id: listId}}});
+  if (!task1 || !task2) {
+    throw new NotFoundException(`One or another of the lists couldn't be found`);
+  }
+  const temp = task1.listPosition;
+  task1.listPosition=task2.listPosition;
+  task2.listPosition=temp;
+  
+  await this.taskRepository.save([task1, task2]);
+}
+
 
 
 }
