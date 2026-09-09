@@ -28,11 +28,13 @@ async remove(id: number): Promise<void> {
 }
 
 async toggle(id: number, listId: number): Promise<Task> {
+  
   const task = await this.taskRepository.findOne({where: {id}});
   if(!task){
     throw new NotFoundException(`Could not toggle task with ID ${id}`);
   }
   task.isCompleted=!task.isCompleted;
+  console.log('h1');
 
   return await this.taskRepository.save(task);
 
@@ -59,7 +61,16 @@ async swapTask(listId: number, task1id: number, task2id: number): Promise<void>{
   
   await this.taskRepository.save([task1, task2]);
 }
-
+async reorderTasks(listId: number, tasks: { id: number }[]): Promise<void> {
+  for (let i = 0; i < tasks.length; i++) {
+    if (tasks[i] && tasks[i].id) {
+      await this.taskRepository.update(
+        { id: tasks[i].id, TaskList: { id: listId } },
+        { listPosition: i }
+      );
+    }
+  }
+}
 
 
 }

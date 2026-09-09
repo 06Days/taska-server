@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -27,19 +27,21 @@ export class TasksController {
   }
   @Post(':id/toggle')
   async toggleTask(
-    @Param('id') id: number,
-    @Param('listId') listId: number
+    @Param('id', ParseIntPipe) id: number,
+    @Param('listId', ParseIntPipe) listId: number
      ): Promise<Task>{
+      console.log('hi');
     return await this.tasksService.toggle(id, listId);
+    
   }
 
   @Post('swap')
-    async swapTasks(
-      @Param('listId') listId: number,
-      @Body() body: { taskId1: number; taskId2: number },
-    ) {
-      await this.tasksService.swapTask(+listId, body.taskId1, body.taskId2);
-      return { success: true };
-    }
+  async reorderTasks(
+    @Param('listId', ParseIntPipe) listId: number,
+    @Body() body: { tasks: { id: number }[] },
+  ) {
+    await this.tasksService.reorderTasks(listId, body.tasks);
+    return { success: true };
+  }
   
 }

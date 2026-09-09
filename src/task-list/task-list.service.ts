@@ -5,7 +5,7 @@ import { TaskList } from './entities/task-list.entity';
 import { CreateTaskListDto } from './dto/create-task-list.dto';
 import { Task } from '../tasks/entities/task.entity';
 import { CreateTaskDto } from '../tasks/dto/create-task.dto';
-
+import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
 @Injectable()
 export class TaskListService {
   constructor(
@@ -20,8 +20,15 @@ export class TaskListService {
   }
 
   async findAllLists(): Promise<TaskList[]> {
-    return await this.TaskListRepository.find({ relations: {'tasks':true} });
-  }
+  return await this.TaskListRepository.find({
+    relations: {tasks: true},
+    order: {
+      tasks: {
+        listPosition: 'ASC', // Forces tasks to always return sorted by position
+      },
+    },
+  });
+}
 
   async findOneList(id: number): Promise<TaskList> {
     const TaskList = await this.TaskListRepository.findOne({
@@ -49,5 +56,6 @@ export class TaskListService {
       throw new NotFoundException(`Task list with ID ${id} not found`);
     }
   }
+ 
  
 }

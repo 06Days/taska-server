@@ -2,7 +2,6 @@ import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
 import { TaskListService } from './task-list.service';
 import { CreateTaskListDto } from './dto/create-task-list.dto';
 import { CreateTaskDto } from '../tasks/dto/create-task.dto';
-
 @Controller('task-lists')
 export class TaskListController {
   constructor(private readonly taskListsService: TaskListService) {}
@@ -31,6 +30,4 @@ export class TaskListController {
   removeList(@Param('id') id: string) {
     return this.taskListsService.removeList(+id);
   }
-  
-  
 }
