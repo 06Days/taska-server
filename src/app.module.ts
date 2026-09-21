@@ -1,17 +1,19 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TasksModule } from './tasks/tasks.module';
+import { TasksModule } from './taska/tasks/tasks.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Task } from './tasks/entities/task.entity';
-import { TaskListModule } from './task-list/task-list.module';
-import { TaskList } from './task-list/entities/task-list.entity';
+import { Task } from './taska/tasks/entities/task.entity';
+import { TaskListModule } from './taska/task-list/task-list.module';
+import { TaskList } from './taska/task-list/entities/task-list.entity';
+
+import { AppManagerModule } from './appmanager/app-manager.module';
 
 @Module({
   
   controllers: [AppController],
   providers: [AppService],
-  imports: [TaskListModule,
+  imports: [TaskListModule, 
     
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
@@ -20,6 +22,7 @@ import { TaskList } from './task-list/entities/task-list.entity';
       synchronize: true, 
     }),
     TasksModule,
+    AppManagerModule,
     
   
   ],

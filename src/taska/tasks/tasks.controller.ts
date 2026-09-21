@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Put, ParseIntPipe, Patch } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { UpdateTaskDto } from './dto/update-task.dto';
@@ -34,6 +34,13 @@ export class TasksController {
     return await this.tasksService.toggle(id, listId);
     
   }
+  @Patch(':id')
+    updateList(
+      @Param('id', ParseIntPipe) id: number,
+      @Body() updateTaskDto: UpdateTaskDto, 
+    ) {
+      return this.tasksService.update(id, updateTaskDto);
+    }
 
   @Post('swap')
   async reorderTasks(

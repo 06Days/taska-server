@@ -5,7 +5,8 @@ import { TaskList } from './entities/task-list.entity';
 import { CreateTaskListDto } from './dto/create-task-list.dto';
 import { Task } from '../tasks/entities/task.entity';
 import { CreateTaskDto } from '../tasks/dto/create-task.dto';
-import { UpdateTaskDto } from 'src/tasks/dto/update-task.dto';
+import { UpdateTaskDto } from '../tasks/dto/update-task.dto';
+import { UpdateTaskListDto } from './dto/update-task-list.dto';
 @Injectable()
 export class TaskListService {
   constructor(
@@ -55,6 +56,19 @@ export class TaskListService {
     if (result.affected === 0) {
       throw new NotFoundException(`Task list with ID ${id} not found`);
     }
+  }
+  async updateList(id: number, updateTaskListDto: UpdateTaskListDto): Promise<TaskList> {
+    
+    const taskList = await this.TaskListRepository.findOne({ where: { id } });
+    if (!taskList) {
+      throw new NotFoundException(`Task list with ID ${id} not found`);
+    }
+
+    
+    this.TaskListRepository.merge(taskList, updateTaskListDto);
+    
+    
+    return await this.TaskListRepository.save(taskList);
   }
  
  

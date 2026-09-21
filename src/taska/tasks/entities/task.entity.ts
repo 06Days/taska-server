@@ -1,4 +1,4 @@
-import { TaskList } from 'src/task-list/entities/task-list.entity';
+import { TaskList } from '../../task-list/entities/task-list.entity';
 import {Column, Entity, ManyToOne, PrimaryGeneratedColumn} from 'typeorm';
 @Entity()
 export class Task {
