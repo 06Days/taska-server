@@ -17,7 +17,7 @@ import { AppManagerModule } from './appmanager/app-manager.module';
     
     TypeOrmModule.forRoot({
       type: 'better-sqlite3',
-      database: 'database.sqlite',
+      database: process.env.DATABASE_PATH ?? 'database.sqlite',
       entities: [Task, TaskList],
       synchronize: true, 
     }),
